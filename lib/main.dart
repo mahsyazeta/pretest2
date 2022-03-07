@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:js';
 
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,14 @@ class _RandomWordsState extends State<RandomWords> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('pretest 2'),
+        actions: [
+          IconButton( 
+            icon: const Icon(Icons.list),
+            onPressed: _pushSaved,
+            tooltip: 'Saved Suggestions',
+            
+            ),
+        ],
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16.0),
@@ -68,7 +77,38 @@ class _RandomWordsState extends State<RandomWords> {
     //final wordPair = WordPair.random();
     //return Text(wordPair.asPascalCase);
   }
- 
+}
+
+void _pushSaved(){
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (context) {
+        final tiles = _saved.map(
+          (pair){
+            return ListTile(
+              title: Text(
+                pair.asPascalCase,
+                style: _biggerFont,
+              ),
+            );
+          },
+        );
+        final divided = this.isNotEmpty 
+          ? ListTile.divideTiles(
+            context: context,
+            tiles: tiles,
+            ).toList()
+          : <Widget>[];
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Saved Suggestions'),
+          ),
+          body: ListView(children: devided),
+        );
+      },
+      ),
+  );
 }
 
 class RandomWords extends StatefulWidget {
